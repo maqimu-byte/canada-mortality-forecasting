@@ -176,4 +176,4 @@ pd.concat(e0_table, names=["sex", "year"]).loc[(slice(None), [2015, 2019, 2022, 
 # ## Why this matters (model risk)
 # OSFI's Guideline E-23 on model risk management (effective May 2027) expects institutions to validate models, including AI/ML models, against outcomes and to understand their limitations. This backtest is a small example of that: a widely used model looked reasonable in-sample (96% variance explained) but was overconfident out of sample, and the error was concentrated at the ages that matter most for term life pricing.
 #
-# **Next:** `03_ml_models.ipynb`: gradient boosting on age, year and sex features (and on the Lee-Carter residuals), using the same backtest so the comparison is fair.
+# **Next:** `03_ml_models.ipynb`: gradient boosting, scored on the same backtest so the comparison is fair.

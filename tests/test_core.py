@@ -58,3 +58,23 @@ def test_parse_wds_maps_by_coordinate():
     ]
     rows = _parse_wds(results, "male")
     assert rows == [(2024, "male", 2, 0.0002), (2024, "male", 0, 0.0045)]
+
+
+def test_ml_features_use_no_future_data():
+    """Changing data after the origin year must not change the inputs."""
+    from src.ml import make_features
+    q = qx_matrix(load_qx(), "male").loc[0:100]
+    lm = np.log(qx_to_mx(q))
+    before = make_features(lm, 2010, 3, "male")
+    lm2 = lm.copy()
+    lm2.loc[:, 2011:] = 0.0
+    pd.testing.assert_frame_equal(before, make_features(lm2, 2010, 3, "male"))
+
+
+def test_ml_training_targets_stop_at_last_year():
+    from src.ml import build_training_set
+    lm = {"male": np.log(qx_to_mx(qx_matrix(load_qx(), "male").loc[0:100]))}
+    X, y = build_training_set(lm, 1990, 2000, horizon=10)
+    assert X["h"].max() <= 10
+    # origin + h <= 2000 for every row: 10 origins, horizons 10..1 -> 55 per age
+    assert len(X) == 55 * 101
