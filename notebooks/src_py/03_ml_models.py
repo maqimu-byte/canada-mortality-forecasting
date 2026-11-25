@@ -249,4 +249,4 @@ imp.sort_values(ascending=False).round(4)
 # 3. **The largest risk is a broken trend, not the choice of model.** All models were 9–21% too optimistic for young adults and missed male life expectancy in 2024 by about 1.7 years. A better algorithm trained on the same history would not fix that. It needs scenario testing, cause-of-death information, or judgement about the overdose crisis.
 # 4. **Model-risk view (OSFI E-23).** The validation discipline here (a separate validation window, a simple benchmark, error by age band, feature importance) is what shows that the extra complexity of ML is not clearly justified for this task.
 #
-# **Next:** `04_insurance_pricing.ipynb`: price a 20-year term life policy for a 40-year-old under each forecast, to show what these differences mean in dollars.
+# **Next:** `04_insurance_pricing.ipynb`: price 10-year term life policies under each forecast, to show what these differences mean in dollars.

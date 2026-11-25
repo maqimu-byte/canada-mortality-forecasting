@@ -78,3 +78,20 @@ def test_ml_training_targets_stop_at_last_year():
     assert X["h"].max() <= 10
     # origin + h <= 2000 for every row: 10 origins, horizons 10..1 -> 55 per age
     assert len(X) == 55 * 101
+
+
+def test_net_premium_constant_mortality():
+    """With constant q and interest i, the level net premium is face * q / (1 + i)."""
+    from src.pricing import net_level_premium, pricing_shortfall
+    q = np.full(10, 0.002)
+    p = net_level_premium(q, 100_000, 0.03)
+    assert np.isclose(p, 100_000 * 0.002 / 1.03)
+    # priced on the true mortality -> no shortfall
+    assert np.isclose(pricing_shortfall(p, q, 100_000, 0.03), 0.0)
+
+
+def test_cohort_qx_follows_diagonal():
+    from src.pricing import cohort_qx
+    mx = pd.DataFrame(np.arange(9).reshape(3, 3) / 100, index=[40, 41, 42], columns=[2015, 2016, 2017])
+    path = cohort_qx(mx, 40, 2015, 3)
+    assert np.allclose(path, -np.expm1(-np.array([0.00, 0.04, 0.08])))
